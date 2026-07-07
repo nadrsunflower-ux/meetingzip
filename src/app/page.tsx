@@ -2,14 +2,7 @@
 
 import Link from "next/link";
 import { useMemo } from "react";
-import {
-  FileText,
-  ListChecks,
-  CalendarDays,
-  Plus,
-  ArrowRight,
-  Inbox,
-} from "lucide-react";
+import { FileText, CalendarDays, Plus, ArrowRight, Inbox } from "lucide-react";
 import { useMeetings } from "@/lib/useMeetings";
 import { useAuth } from "@/lib/useAuth";
 import { formatKoreanDate } from "@/lib/format";
@@ -20,26 +13,11 @@ export default function HomePage() {
   const thisYear = new Date().getFullYear();
 
   const stats = useMemo(() => {
-    const openActions = meetings.reduce(
-      (n, m) => n + m.actionItems.filter((a) => !a.done).length,
-      0
-    );
     const thisYearCount = meetings.filter((m) => m.year === thisYear).length;
-    return { total: meetings.length, thisYearCount, openActions };
+    return { total: meetings.length, thisYearCount };
   }, [meetings, thisYear]);
 
-  const recent = meetings.slice(0, 6);
-  const openItems = useMemo(
-    () =>
-      meetings
-        .flatMap((m) =>
-          m.actionItems
-            .filter((a) => !a.done)
-            .map((a) => ({ ...a, meeting: m }))
-        )
-        .slice(0, 10),
-    [meetings]
-  );
+  const recent = meetings.slice(0, 8);
 
   return (
     <div className="mx-auto max-w-5xl px-4 py-8 sm:px-6 sm:py-10">
@@ -60,7 +38,7 @@ export default function HomePage() {
       )}
 
       {/* 통계 */}
-      <div className="mb-8 grid grid-cols-1 gap-3 sm:grid-cols-3">
+      <div className="mb-8 grid grid-cols-1 gap-3 sm:grid-cols-2">
         <StatCard
           icon={<FileText size={18} />}
           label="전체 회의록"
@@ -71,11 +49,6 @@ export default function HomePage() {
           label={`${thisYear}년 회의록`}
           value={stats.thisYearCount}
         />
-        <StatCard
-          icon={<ListChecks size={18} />}
-          label="미완료 액션 아이템"
-          value={stats.openActions}
-        />
       </div>
 
       {loading ? (
@@ -83,65 +56,31 @@ export default function HomePage() {
       ) : meetings.length === 0 ? (
         <EmptyHome isAdmin={isAdmin} />
       ) : (
-        <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
-          {/* 최근 회의록 */}
-          <section>
-            <h2 className="mb-3 text-sm font-semibold text-muted">최근 회의록</h2>
-            <ul className="space-y-2">
-              {recent.map((m) => (
-                <li key={m.id}>
-                  <Link
-                    href={`/meetings/${m.id}`}
-                    className="group flex items-center gap-3 rounded-lg border border-border bg-surface px-4 py-3 transition hover:border-border-strong"
-                  >
-                    <FileText size={16} className="shrink-0 text-muted" />
-                    <div className="min-w-0 flex-1">
-                      <p className="truncate font-medium">{m.title}</p>
-                      <p className="text-xs text-muted">
-                        {formatKoreanDate(m.meetingDate)}
-                      </p>
-                    </div>
-                    <ArrowRight
-                      size={16}
-                      className="shrink-0 text-muted opacity-0 transition group-hover:opacity-100"
-                    />
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </section>
-
-          {/* 미완료 액션 아이템 */}
-          <section>
-            <h2 className="mb-3 text-sm font-semibold text-muted">
-              미완료 액션 아이템
-            </h2>
-            {openItems.length === 0 ? (
-              <div className="rounded-lg border border-dashed border-border px-4 py-8 text-center text-sm text-muted">
-                미완료 항목이 없습니다 🎉
-              </div>
-            ) : (
-              <ul className="space-y-2">
-                {openItems.map((it) => (
-                  <li key={it.id}>
-                    <Link
-                      href={`/meetings/${it.meeting.id}`}
-                      className="flex items-start gap-2.5 rounded-lg border border-border bg-surface px-4 py-2.5 transition hover:border-border-strong"
-                    >
-                      <span className="mt-0.5 h-4 w-4 shrink-0 rounded border border-border-strong" />
-                      <div className="min-w-0">
-                        <p className="text-sm">{it.content}</p>
-                        <p className="truncate text-xs text-muted">
-                          {it.meeting.title}
-                        </p>
-                      </div>
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </section>
-        </div>
+        <section>
+          <h2 className="mb-3 text-sm font-semibold text-muted">최근 회의록</h2>
+          <ul className="space-y-2">
+            {recent.map((m) => (
+              <li key={m.id}>
+                <Link
+                  href={`/meetings/${m.id}`}
+                  className="group flex items-center gap-3 rounded-lg border border-border bg-surface px-4 py-3 transition hover:border-border-strong"
+                >
+                  <FileText size={16} className="shrink-0 text-muted" />
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate font-medium">{m.title}</p>
+                    <p className="text-xs text-muted">
+                      {formatKoreanDate(m.meetingDate)}
+                    </p>
+                  </div>
+                  <ArrowRight
+                    size={16}
+                    className="shrink-0 text-muted opacity-0 transition group-hover:opacity-100"
+                  />
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
       )}
     </div>
   );
