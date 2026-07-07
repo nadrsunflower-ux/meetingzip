@@ -1,0 +1,166 @@
+@import "tailwindcss";
+
+:root {
+  --background: #f7f7f5;
+  --surface: #ffffff;
+  --foreground: #1f2023;
+  --muted: #6b6f76;
+  --border: #e6e6e3;
+  --border-strong: #d8d8d4;
+  --accent: #2f6f4f;
+  --accent-fg: #ffffff;
+  --accent-soft: #e7f1eb;
+  --danger: #b3261e;
+  --hover: #efefec;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #17181a;
+    --surface: #1f2124;
+    --foreground: #e9e9e6;
+    --muted: #9a9ea6;
+    --border: #2c2e32;
+    --border-strong: #3a3d42;
+    --accent: #5bbd8a;
+    --accent-fg: #10241a;
+    --accent-soft: #1e2f26;
+    --danger: #e5776f;
+    --hover: #26282c;
+  }
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-accent: var(--accent);
+  --color-accent-fg: var(--accent-fg);
+  --color-accent-soft: var(--accent-soft);
+  --color-danger: var(--danger);
+  --color-hover: var(--hover);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* 마크다운 본문 렌더링 스타일 */
+.prose {
+  line-height: 1.7;
+  font-size: 0.975rem;
+  color: var(--foreground);
+  word-break: break-word;
+}
+.prose > *:first-child {
+  margin-top: 0;
+}
+.prose h1,
+.prose h2,
+.prose h3 {
+  font-weight: 650;
+  line-height: 1.3;
+  margin: 1.6em 0 0.6em;
+}
+.prose h1 {
+  font-size: 1.5rem;
+}
+.prose h2 {
+  font-size: 1.25rem;
+  padding-bottom: 0.3em;
+  border-bottom: 1px solid var(--border);
+}
+.prose h3 {
+  font-size: 1.1rem;
+}
+.prose p {
+  margin: 0.7em 0;
+}
+.prose ul,
+.prose ol {
+  margin: 0.7em 0;
+  padding-left: 1.4em;
+}
+.prose ul {
+  list-style: disc;
+}
+.prose ol {
+  list-style: decimal;
+}
+.prose li {
+  margin: 0.25em 0;
+}
+.prose li::marker {
+  color: var(--muted);
+}
+.prose a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.prose blockquote {
+  border-left: 3px solid var(--border-strong);
+  padding-left: 1em;
+  margin: 0.9em 0;
+  color: var(--muted);
+}
+.prose code {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 0.85em;
+  background: var(--hover);
+  padding: 0.15em 0.4em;
+  border-radius: 5px;
+}
+.prose pre {
+  background: var(--hover);
+  padding: 1em;
+  border-radius: 10px;
+  overflow-x: auto;
+  margin: 0.9em 0;
+}
+.prose pre code {
+  background: none;
+  padding: 0;
+}
+.prose table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 0.9em 0;
+  display: block;
+  overflow-x: auto;
+}
+.prose th,
+.prose td {
+  border: 1px solid var(--border);
+  padding: 0.5em 0.75em;
+  text-align: left;
+}
+.prose th {
+  background: var(--hover);
+  font-weight: 600;
+}
+.prose hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 1.5em 0;
+}
+
+/* 스크롤바 */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-strong) transparent;
+}

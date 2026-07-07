@@ -1,0 +1,24 @@
+rules_version = '2';
+
+// 첨부파일: 읽기는 누구나(다운로드), 업로드/삭제는 "지정된 관리자 1명"만.
+// ⚠️ 관리자를 바꾸면 아래 UID를 새 UID로 교체하고 콘솔에 다시 게시하세요.
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    function isAdmin() {
+      return request.auth != null
+        && request.auth.uid == 'EYkwU0xfP4cfQaWYl8UHqJiTxyt1';
+    }
+
+    match /attachments/{allPaths=**} {
+      allow read: if true;
+      // 파일당 25MB 제한
+      allow create, update: if isAdmin() && request.resource.size < 25 * 1024 * 1024;
+      allow delete: if isAdmin();
+    }
+
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}
